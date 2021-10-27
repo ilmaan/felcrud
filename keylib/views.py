@@ -172,3 +172,35 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        cpassword = request.POST['cpassword']
+
+        if password==cpassword:
+            if User.objects.filter(username=username).exists():
+                print("username taken")
+                messages.info(request,"Username taken")
+                return redirect('register')
+                
+            elif User.objects.filter(email=email).exists():
+                print("email taken")
+                messages.info(request,"Email taken")
+                return redirect('register')
+
+            else:    
+                user = User.objects.create_user(username=username,email=email,password=password)
+                user.save()
+                return redirect('login')
+        else:
+            print("Password do not match")
+
+
+        return redirect('/')
+
+    else:
+        return render(request,'register.html')

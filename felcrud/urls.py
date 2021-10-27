@@ -22,6 +22,7 @@ urlpatterns = [
     path('library/', views.Library_api,name='library'),
     path('login/', views.login,name='login'),
     path('logout/', views.logout,name='logout'),
+    path('register/', views.register,name='register'),
     path('', views.index,name='index'),
     path('addshow/', views.addshow,name="addshow"),
     path('allbooks/', views.allbooks,name="allbooks"),
