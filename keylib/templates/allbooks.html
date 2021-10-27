@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+<!--  -->
+
+{% block content %}
+
+<div class="text-center row">
+
+
+    <div class="col-sm-12 ">
+        <h4 class="text-center alert alert-info">All Books</h4>
+
+        {% if lib %}
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">BOOK Name</th>
+                    <th scope="col">Book Author</th>
+                    <th scope="col">Book Quantity</th>
+                    <th scope="col">Edit Book</th>
+                    <th scope="col">Delete Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for l in lib %}
+                <tr>
+                    <th scope="row">{{l.id}}</th>
+                    <td>{{l.bname}}</td>
+                    <td>{{l.bauthor}}</td>
+                    <td>{{l.bquantity}}</td>
+                    <td><a href="{% url 'updatebook' l.id %}" class="btn btn-warning btn-sm">Edit</a></td>
+                    <!-- <td><a href="" class="btn btn-danger btn-sm">Delete</a></td> -->
+                    <td>
+                        <form action="{% url 'deletebook' l.id %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        {% else%}
+        <h4>There are no books please add</h4>
+        {% endif %}
+
+    </div>
+
+    <a class="btn btn-success" href="{% url 'addshow'%}">Add A Book</a>
+
+</div>
+
+{% endblock content %}
