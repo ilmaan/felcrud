@@ -1,5 +1,31 @@
+from django.db import models
 from rest_framework import serializers
-from .models import Library
+from .models import Library, Hero, Employee
+
+
+##################### CRUD REST #########################
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+
+##################### CRUD REST #########################
+
+
+
+
+# MEDIUM STACK OVERFLOW
+
+class HeroSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Hero
+        fields = ('id','name', 'alias')
+
+
+
+
 
 
 class LibrarySerializer(serializers.ModelSerializer):

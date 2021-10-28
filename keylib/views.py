@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 # import requests
 from rest_framework.parsers import JSONParser
-from .models import Library
-from .serializers import LibrarySerializer
+from .models import Employee, Library, Hero
+from .serializers import EmployeeSerializer, LibrarySerializer, HeroSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
@@ -21,8 +21,118 @@ from django.contrib.auth.models import User, auth
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from rest_framework import viewsets
+from rest_framework.response import Response
+
 
 # Create your views here.
+
+################CRUD REST ###############
+
+@api_view(['GET','POST','PUT','DELETE','PATCH'])
+def employee_api(request,pk=None):
+    if request.method == 'GET':
+        # id = request.data.get('id')
+        id = pk
+        if id is not None:
+            emp = Employee.objects.get(id=id)
+            serializer = EmployeeSerializer(emp)
+            return Response(serializer.data)
+
+        emp = Employee.objects.all()
+        serializer = EmployeeSerializer(emp, many=True)
+        return Response(serializer.data)
+
+    if request.method =='POST':
+        data = request.data
+        serializer = EmployeeSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data Added'})
+        return Response(serializer.errors)    
+
+    if request.method == 'PUT':
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        data = request.data
+        serializer = EmployeeSerializer(emp,data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data Updated'})
+        return Response(serializer.errors)
+
+    
+    if request.method == 'PATCH':
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        data = request.data
+        serializer = EmployeeSerializer(emp,data=data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data Updated'})
+        return Response(serializer.errors)
+
+
+    if request.method == 'DELETE':
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        emp.delete()
+        return Response({'msg':'Data Deleeted'})    
+
+
+
+
+################CRUD REST ###############
+
+
+
+
+
+
+
+# MEDIUM _STACK OVERFLOW CRUD
+
+class HeroViewSet(viewsets.ModelViewSet):
+    queryset = Hero.objects.all().order_by('name')
+    serializer_class = HeroSerializer
+
+
+#################################
+
+# @api_view()
+# def func1(request):
+#     return Response({'msg':'Cradence'})
+
+
+# @api_view(['POST'])
+# def func1(request):
+#     if request.method == 'POST':
+#         print(request.data)
+#         return Response({'msg':'Bradence'})
+
+
+@api_view(['GET','POST'])
+def func1(request):
+    if request.method == 'GET':
+        print(request.data)
+        return Response({'msg':'GET REQUEST'})
+
+    if request.method == 'POST':
+        print(request.data)
+        return Response({'msg':'POST REQUEST'})
+
+
+
+
+#########################################
+
+
+
+
+
 
 # Class Based view 
 
