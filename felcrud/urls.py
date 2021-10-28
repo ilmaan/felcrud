@@ -19,7 +19,7 @@ from keylib import views
 
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
-    path('library/', views.Library_api,name='library'),
+    path('library/', views.Library_api.as_view(),name='library'),
     path('login/', views.login,name='login'),
     path('logout/', views.logout,name='logout'),
     path('register/', views.register,name='register'),

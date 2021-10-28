@@ -16,13 +16,13 @@ def get_data(id= None):
     print(data)
 
 
-get_data(2)
+# get_data(13)
 
 def post_data():
     data = {
-        'bname':'rangeels',
-        'bauthor':'ameer khan',
-        'bquantity':'69'
+        'bname':'Family Man',
+        'bauthor':'Manoj',
+        'bquantity':'12'
     }
 
     json_data = json.dumps(data)
@@ -33,14 +33,14 @@ def post_data():
     print(data)
 
 
-# post_data()
+post_data()
 
 
 def update_data():
     data = {
-        'id':'5',
-        'bname':'rangeela',
-        # 'bauthor':'deol kings',
+        'id':'18',
+        # 'bname':'rangeela',
+        'bauthor':'Madhav',
         # 'bquantity':'43'
     }
 

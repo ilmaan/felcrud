@@ -12,17 +12,23 @@ from .models import Library
 from .serializers import LibrarySerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
 
 from .forms import Book_Registration
 
 from django.contrib.auth.models import User, auth
 
+from django.utils.decorators import method_decorator
+from django.views import View
 
 
 # Create your views here.
-@csrf_exempt
-def Library_api(request):
-    if request.method == 'GET':
+
+# Class Based view 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class Library_api(View):
+    def get(self, request, *args, **kwargs):
         json_data = request.body
         stream = io.BytesIO(json_data)
         python_data = JSONParser().parse(stream)
@@ -38,7 +44,7 @@ def Library_api(request):
         json_data = JSONRenderer().render(serializer.data)
         return HttpResponse(json_data, content_type='application/json')
 
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
         json_data = request.body
         stream = io.BytesIO(json_data)
         python_data = JSONParser().parse(stream)
@@ -52,10 +58,9 @@ def Library_api(request):
 
         
         json_data = JSONRenderer().render(serializer.errors)
-        return HttpResponse(json_data,content_type='application/json') 
+        return HttpResponse(json_data,content_type='application/json')
 
-
-    if request.method == 'PUT':
+    def put(self, request, *args, **kwargs):
         json_data = request.body
         stream = io.BytesIO(json_data)
         python_data = JSONParser().parse(stream)
@@ -72,8 +77,7 @@ def Library_api(request):
         json_data = JSONRenderer().render(serializer.errors)
         return HttpResponse(json_data, content_type='application/json')
 
-
-    if request.method == 'DELETE':
+    def delete(self, request, *args, **kwargs):
         json_data = request.body
         stream = io.BytesIO(json_data)
         python_data = JSONParser().parse(stream)
@@ -84,6 +88,75 @@ def Library_api(request):
         # json_data= JSONRenderer().render(res)
         # return HttpResponse(json_data, content_type='application/json')
         return JsonResponse(res,safe=False)
+
+
+
+# Function Based View
+
+# @csrf_exempt
+# def Library_api(request):
+#     if request.method == 'GET':
+#         json_data = request.body
+#         stream = io.BytesIO(json_data)
+#         python_data = JSONParser().parse(stream)
+#         id = python_data.get('id',None)
+#         if id is not None:
+#             lib = Library.objects.get(id=id)
+#             serializer =  LibrarySerializer(lib)
+#             json_data = JSONRenderer().render(serializer.data)
+#             return HttpResponse(json_data, content_type='application/json')
+
+#         lib = Library.objects.all()
+#         serializer = LibrarySerializer(lib, many=True)
+#         json_data = JSONRenderer().render(serializer.data)
+#         return HttpResponse(json_data, content_type='application/json')
+
+#     if request.method == 'POST':
+#         json_data = request.body
+#         stream = io.BytesIO(json_data)
+#         python_data = JSONParser().parse(stream)
+#         serializer = LibrarySerializer(data = python_data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             res = {'msg':'Book Added'}
+#             # json_data = JSONRenderer().render(res)
+#             # return HttpResponse(json_data,content_type='application/json') 
+#             return JsonResponse(res)
+
+        
+#         json_data = JSONRenderer().render(serializer.errors)
+#         return HttpResponse(json_data,content_type='application/json') 
+
+
+#     if request.method == 'PUT':
+#         json_data = request.body
+#         stream = io.BytesIO(json_data)
+#         python_data = JSONParser().parse(stream)
+#         id = python_data.get('id')
+#         lib = Library.objects.get(id=id)
+#         serializer = LibrarySerializer(lib, data= python_data,partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             res = {'msg':'Book Updated'}
+#             # json_data = JSONRenderer().render(res)
+#             # return HttpResponse(json_data, content_type='application/json')
+#             return JsonResponse(res)
+        
+#         json_data = JSONRenderer().render(serializer.errors)
+#         return HttpResponse(json_data, content_type='application/json')
+
+
+#     if request.method == 'DELETE':
+#         json_data = request.body
+#         stream = io.BytesIO(json_data)
+#         python_data = JSONParser().parse(stream)
+#         id = python_data.get('id')
+#         lib = Library.objects.get(id=id)
+#         lib.delete()
+#         res = {'msg':'Data Deleted'}
+#         # json_data= JSONRenderer().render(res)
+#         # return HttpResponse(json_data, content_type='application/json')
+#         return JsonResponse(res,safe=False)
 
 
 
