@@ -13,6 +13,7 @@ from .serializers import EmployeeSerializer, LibrarySerializer, HeroSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 
 from .forms import Book_Registration
 
@@ -26,6 +27,63 @@ from rest_framework.response import Response
 
 
 # Create your views here.
+
+# ##################### CLASS BASED VIEW ############
+
+class employee_api_class(APIView):
+    def get(self, request,pk=None, format=None):
+        # id = request.data.get('id')
+        id = pk
+        if id is not None:
+            emp = Employee.objects.get(id=id)
+            serializer = EmployeeSerializer(emp)
+            return Response(serializer.data)
+
+        emp = Employee.objects.all()
+        serializer = EmployeeSerializer(emp, many=True)
+        return Response(serializer.data)
+
+    def post(self,request,pk=None, format=None):
+        data = request.data
+        serializer = EmployeeSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data Added'})
+        return Response(serializer.errors) 
+
+
+    def put(self,request,pk=None, format=None):
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        data = request.data
+        serializer = EmployeeSerializer(emp,data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Put Data Updated'})
+        return Response(serializer.errors)
+
+    
+    def patch(self,request,pk=None, format=None):
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        data = request.data
+        serializer = EmployeeSerializer(emp,data=data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Patch Data Updated'})
+        return Response(serializer.errors)
+
+
+    def delete(self,request,pk=None, format=None):
+        # id = request.data.get('id')
+        id = pk
+        emp = Employee.objects.get(pk=id)
+        emp.delete()
+        return Response({'msg':'Data Deleeted'}) 
+
+
 
 ################CRUD REST ###############
 

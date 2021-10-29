@@ -32,5 +32,7 @@ urlpatterns = [
     path('func1/', views.func1,name="func1"),
     path('empl/', views.employee_api,name="employee_api"),
     path('empl/<int:id>', views.employee_api,name="employee_api"),
+    path('emplclass/', views.employee_api_class.as_view(),name='employee_api'),
+    path('emplclass/<int:pk>', views.employee_api_class.as_view(),name='employee_api'),
     
 ]
